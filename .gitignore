@@ -19,3 +19,10 @@
 
 # Go workspace file
 go.work
+
+# My editor
+.idea/vcs.xml
+.idea/modules.xml
+.idea/misc.xml
+.idea/go-nftables-manager.iml
+.idea/.gitignore
