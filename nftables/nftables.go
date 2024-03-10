@@ -68,13 +68,13 @@ func (n *Nftables) UpdateFirewallRules(services []consul.Service) error {
 
 func (n *Nftables) applyAppRules(address string, metricsAddresses, backupsAddresses map[string]bool, existingRules map[string]bool) error {
 	for metricsAddress := range metricsAddresses {
-		rule := fmt.Sprintf("add rule inet filter INPUT ip saddr %s ip daddr %s tcp dport %d accept", metricsAddress, address, portMySQLExporter)
+		rule := fmt.Sprintf("add rule filter INPUT ip saddr %s ip daddr %s tcp dport %d accept", metricsAddress, address, portMySQLExporter)
 		if err := n.applyRule(rule, existingRules); err != nil {
 			return fmt.Errorf("failed to apply MySQL exporter access rule: %v", err)
 		}
 	}
 	for backupsAddress := range backupsAddresses {
-		rule := fmt.Sprintf("add rule inet filter INPUT ip saddr %s ip daddr %s tcp dport %d accept", backupsAddress, address, portMySQL)
+		rule := fmt.Sprintf("add rule filter INPUT ip saddr %s ip daddr %s tcp dport %d accept", backupsAddress, address, portMySQL)
 		if err := n.applyRule(rule, existingRules); err != nil {
 			return fmt.Errorf("failed to apply MySQL access rule: %v", err)
 		}
@@ -83,7 +83,7 @@ func (n *Nftables) applyAppRules(address string, metricsAddresses, backupsAddres
 }
 
 func (n *Nftables) applyLogstashRule(address string, existingRules map[string]bool) error {
-	rule := fmt.Sprintf("add rule inet filter INPUT ip daddr %s tcp dport %d accept", address, portLogstash)
+	rule := fmt.Sprintf("add rule filter INPUT ip daddr %s tcp dport %d accept", address, portLogstash)
 	if err := n.applyRule(rule, existingRules); err != nil {
 		return fmt.Errorf("failed to apply logstash access rule: %v", err)
 	}
@@ -92,7 +92,7 @@ func (n *Nftables) applyLogstashRule(address string, existingRules map[string]bo
 
 func (n *Nftables) applyNodeExporterRule(address string, metricsAddresses map[string]bool, existingRules map[string]bool) error {
 	if _, found := metricsAddresses[address]; found {
-		rule := fmt.Sprintf("add rule inet filter INPUT ip daddr %s tcp dport %d accept", address, portNodeExporter)
+		rule := fmt.Sprintf("add rule filter INPUT ip daddr %s tcp dport %d accept", address, portNodeExporter)
 		if err := n.applyRule(rule, existingRules); err != nil {
 			return fmt.Errorf("failed to apply node exporter access rule: %v", err)
 		}
