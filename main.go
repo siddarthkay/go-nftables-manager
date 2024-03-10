@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"go-nftables-manager/consul"
+	"go-nftables-manager/nftables"
 	"log"
 )
 
@@ -31,5 +32,10 @@ func main() {
 		}
 	}
 
-	log.Println("Fetched services from consul successfully")
+	nft := nftables.NewNftables()
+	if err := nft.UpdateFirewallRules(services); err != nil {
+		log.Fatalf("Failed to update firewall rules: %v", err)
+	}
+
+	log.Println("Firewall rules updated successfully")
 }
