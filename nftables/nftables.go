@@ -68,7 +68,7 @@ func (n *Nftables) UpdateFirewallRules(services []consul.Service) error {
 func (n *Nftables) createSets() error {
 	sets := []string{"metrics_servers", "backups_servers", "app_servers", "logs_servers"}
 	for _, set := range sets {
-		output, err := n.executeCommand("add", "set", "filter", set, "{", "type", "ipv4_addr", "}")
+		output, err := n.executeCommand("add", "set", "filter", set, "{", "type", "ipv4_addr;", "}")
 		if err != nil {
 			return fmt.Errorf("failed to create set '%s': %v, output: %s", set, err, output)
 		}
