@@ -36,10 +36,27 @@ func TestUpdateFirewallRules(t *testing.T) {
 		t.Errorf("UpdateFirewallRules returned an error: %v", err)
 	}
 
-	// Handle empty case
-	err = nft.UpdateFirewallRules([]consul.Service{})
+	err = nft.ApplyRules()
 	if err != nil {
-		t.Errorf("UpdateFirewallRules with an empty slice returned an error: %v", err)
+		t.Errorf("ApplyRules returned an error: %v", err)
 	}
 
+}
+
+func TestGenerateRulesFile(t *testing.T) {
+	nft := NewNftables()
+
+	services, err := fetchServicesFromTestData()
+	if err != nil {
+		t.Fatalf("Failed to fetch services from URL: %v", err)
+	}
+
+	err = nft.UpdateFirewallRules(services)
+	if err != nil {
+		t.Errorf("UpdateFirewallRules returned an error: %v", err)
+	}
+
+	if _, err := os.Stat(nft.RulesFile); os.IsNotExist(err) {
+		t.Errorf("Rules file %s does not exist", nft.RulesFile)
+	}
 }

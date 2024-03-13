@@ -33,9 +33,14 @@ func main() {
 	}
 
 	nft := nftables.NewNftables()
+
 	if err := nft.UpdateFirewallRules(services); err != nil {
 		log.Fatalf("Failed to update firewall rules: %v", err)
 	}
 
-	log.Println("Firewall rules updated successfully")
+	if err := nft.ApplyRules(); err != nil {
+		log.Fatalf("Failed to apply nftables rules: %v", err)
+	}
+
+	log.Println("Firewall rules updated and applied successfully")
 }
