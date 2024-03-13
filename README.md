@@ -63,10 +63,20 @@ You can modify these constants in the `main.go` file to match your specific setu
 
 ## Testing
 
-The project includes a test suite for the `nftables` package. To run the tests, use the following command:
+The project includes a test suite for the `nftables` package. 
+
+You can preview the generated rules by running the `TestGenerateRulesFile` like this : 
 
 ```
-go test ./nftables
+go test -run TestGenerateRulesFile  ./nftables
+```
+
+This will generate a `nftables.rules` file in the current directory.
+
+You can then test applying those rules via the `TestUpdateFirewallRules` like this :
+
+```
+go test -run TestUpdateFirewallRules  ./nftables
 ```
 
 The tests use a sample `services.json` file located in the `testdata` directory to simulate the services retrieved from Consul.
